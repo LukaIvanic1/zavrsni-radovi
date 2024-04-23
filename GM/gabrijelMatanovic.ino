@@ -18,11 +18,12 @@ AsyncWebServer server(80);
 void setup() {
   Serial.begin(115200);
 
-  // Connect to WiFi
+  Serial.println("Connecting to WiFi...");
+  
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi...");
+    Serial.println(".");
   }
   Serial.println("Connected to WiFi");
 
@@ -30,22 +31,6 @@ void setup() {
   pinMode(ledPin2, OUTPUT);
   pinMode(potPin, INPUT);
 
-  // Define server routes
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    String html = "<html><head><script>";
-    html += "setInterval(function() {";
-    html += "fetch('/potValue')";
-    html += ".then(response => response.text())";
-    html += ".then(data => document.getElementById('potValue').innerText = 'Potentiometer Value: ' + data);";
-    html += "}, 100);</script></head><body>";
-    html += "<h1>ESP32 Web Server</h1>";
-    html += "<p id='potValue'>Potentiometer Value: " + String(potValue) + "</p>";
-    html += "<button onclick=\"toggleLED(1)\">Toggle LED 1</button>";
-    html += "<button onclick=\"toggleLED(2)\">Toggle LED 2</button>";
-    html += "<script>function toggleLED(led) { fetch('/toggle?led=' + led); }</script>";
-    html += "</body></html>";
-    request->send(200, "text/html", html);
-  });
 
   server.on("/toggle", HTTP_GET, [](AsyncWebServerRequest *request){
     String ledParam = request->arg("led");
@@ -59,16 +44,17 @@ void setup() {
     request->send(200, "text/plain", "Toggle successful");
   });
 
+  
+  
   server.on("/potValue", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/plain", String(potValue).c_str());
   });
 
-  // Start server
+  
   server.begin();
 }
 
 void loop() {
-  // Read potentiometer value every 50ms
   delay(5);
   potValue = analogRead(potPin);
 }
