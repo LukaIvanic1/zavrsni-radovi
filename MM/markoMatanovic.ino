@@ -6,7 +6,7 @@ int echoPin = 2;
 
 LiquidCrystal_I2C lcd(0x27,20,4); 
 
-int tareTipka = 7;
+int tareTipka = 6;
 
 double visinaCase; 
 
