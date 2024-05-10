@@ -7,8 +7,7 @@ const int led1Pin = 2;
 const int led2Pin = 4;
 
 int potValue = 0;
-bool led1State = false;
-bool led2State = false;
+
 
 void setup() {
   pinMode(led1Pin, OUTPUT);
@@ -32,19 +31,15 @@ void loop() {
     char command = SerialBT.read();
     switch (command) {
       case '1':
-        led1State = !led1State;
         digitalWrite(led1Pin, HIGH);
         break;
       case '2':
-        led2State = !led2State;
         digitalWrite(led2Pin, HIGH);
         break;
       case '3':
-        led1State = !led1State;
         digitalWrite(led1Pin, LOW);
         break;
       case '4':
-        led2State = !led2State;
         digitalWrite(led2Pin, LOW);
         break;
       default:
